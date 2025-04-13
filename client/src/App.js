@@ -169,93 +169,158 @@ function App() {
         // eslint-disable-next-line
     }, [selectedDayIndex]);
 
+    useEffect(() => {
+        if (!weather?.forecast?.forecastday?.[selectedDayIndex]) return;
+
+        const condition = weather.forecast.forecastday[selectedDayIndex].day.condition.text.toLowerCase();
+        let className = '';
+
+        if (condition.includes('sunny')) className = 'body-sunny';
+        else if (condition.includes('rain')) className = 'body-rain';
+        else if (condition.includes('cloud')) className = 'body-cloudy';
+        else if (condition.includes('overcast')) className = 'body-cloudy';
+        else if (condition.includes('snow')) className = 'body-snow';
+        else className = 'body-default';
+
+        // Clean up previous class
+        document.body.classList.remove(
+            'body-sunny', 'body-rain', 'body-cloudy', 'body-snow', 'body-default'
+        );
+
+        document.body.classList.add(className);
+
+        // Optional cleanup on unmount
+        return () => {
+            document.body.classList.remove(className);
+        };
+    }, [weather, selectedDayIndex]);
+
     const cToF = (celsius) => (celsius * 9 / 5 + 32).toFixed(1);
     const getDayName = (dateStr) => new Date(dateStr).toLocaleDateString('en-US', { weekday: 'long' });
 
+
+
     return (
-        <div className="app-container">
-            <h1 className="title">🌤️ Sunshine View 🌤️</h1>
+        <div>
+
+            <nav className="nav">
+                <h1 className="title">🌤️ Sunshine View</h1>
+                <div className="controls-container">
+                    <div className="search">
+                        <input
+                            className="search-input"
+                            value={city}
+                            onChange={handleCityInputChange}
+                            placeholder="Enter a city"
+                        />
+
+                        {suggestions.length > 0 && (
+                            <div className="suggestions-dropdown">
+                                {suggestions.map((sugg, idx) => (
+                                    <div key={idx} onClick={() => handleSuggestionClick(sugg)} className="suggestion-item">
+                                        {sugg.display}
+                                    </div>
+                                ))}
+                            </div>
+                        )}
+                    </div>
+
+                    <button className="btn-primary" onClick={() => fetchWeatherByCity(city)}>Search</button>
+
+                </div>
+
+                <button className="btn-secondary" onClick={useMyLocation}>📍 Use My Location</button>
+
+            </nav>
+
+
 
             <div className="header-container">
-                <div className="controls-container">
-                    <input
-                        className="search-input"
-                        value={city}
-                        onChange={handleCityInputChange}
-                        placeholder="Enter a city"
-                    />
-                    <button className="btn primary" onClick={() => fetchWeatherByCity(city)}>Search</button>
-                    <button className="btn secondary" onClick={useMyLocation}>📍 Use My Location</button>
+
+
+
+                {error && <p className="error">{error}</p>}
+                {loading && <div className="spinner"></div>}
+
+
+                    {weather?.location && weather?.forecast?.forecastday?.[selectedDayIndex] && (
+                        <>
+
+                        <div className="weather-box">
+                            <h2>{weather.location.name}, {weather.location.country}</h2>
+                            <p><strong>Local Time:</strong> {weather.location.localtime}</p>
+                            <p><strong>Day:</strong> {getDayName(weather.forecast.forecastday[selectedDayIndex].date)}</p>
+                            <p><strong>Condition:</strong> {weather.forecast.forecastday[selectedDayIndex].day.condition.text}</p>
+                            <p><strong>Temperature:</strong> {weather.forecast.forecastday[selectedDayIndex].day.avgtemp_c}°C / {cToF(weather.forecast.forecastday[selectedDayIndex].day.avgtemp_c)}°F</p>
+                            <p><strong>Humidity:</strong> {weather.forecast.forecastday[selectedDayIndex].day.avghumidity}%</p>
+                            <p><strong>Max Wind:</strong> {weather.forecast.forecastday[selectedDayIndex].day.maxwind_kph} km/h</p>
+                            <p>🌅 <strong>Sunrise:</strong> {weather.forecast.forecastday[selectedDayIndex].astro.sunrise} &nbsp; | &nbsp;
+                                🌇 <strong>Sunset:</strong> {weather.forecast.forecastday[selectedDayIndex].astro.sunset}
+                            </p>
+                        </div>
+
+                            {weather?.forecast && (
+                                <div className="day-container">
+                                    {weather.forecast.forecastday.map((day, idx) => (
+                                        <button
+                                            key={idx}
+                                            onClick={() => setSelectedDayIndex(idx)}
+                                            className={`day-button ${selectedDayIndex === idx ? 'selected' : ''}`}
+                                        >
+                                            {new Date(day.date).toLocaleDateString(undefined, {
+                                                weekday: 'short',
+                                                month: 'short',
+                                                day: 'numeric',
+                                            })}
+
+                                                <>
+                                                    <p><strong>Condition:</strong> {day.day.condition.text}</p>
+                                                    <p><strong>High:</strong> {day.day.maxtemp_f}°F
+                                                        <strong> Low:</strong> {day.day.mintemp_f}°F</p>
+                                                    <p><strong>Humidity:</strong> {day.day.avghumidity}%</p>
+                                                </>
+                                        </button>
+                                    ))}
+                                </div>
+                            )}
+
+
+
+                        </>
+
+                    )}
+
+
                 </div>
 
-                {suggestions.length > 0 && (
-                    <div className="suggestions-dropdown">
-                        {suggestions.map((sugg, idx) => (
-                            <div key={idx} onClick={() => handleSuggestionClick(sugg)} className="suggestion-item">
-                                {sugg.display}
-                            </div>
-                        ))}
-                    </div>
-                )}
-
-                {weather?.forecast && (
-                    <div className="controls-container">
-                        {['Today', 'Tomorrow', 'Day After'].map((label, idx) => (
-                            <button
-                                key={idx}
-                                onClick={() => setSelectedDayIndex(idx)}
-                                className={`day-button ${selectedDayIndex === idx ? 'selected' : ''}`}
+            <div>
+                {wordArray.length > 0 && (
+                    <div className="narrative-container">
+                        <h3><span style={{ color: '#007bff' }}>AI</span> Narrative</h3>
+                        {wordArray.map((word, i) => (
+                            <span
+                                key={i}
+                                className="narrative-word"
+                                style={{
+                                    animationDelay: `${i * 80}ms`,
+                                    animationFillMode: i < visibleWordCount ? 'forwards' : 'none'
+                                }}
                             >
-                                {label}
-                            </button>
+                    {word}
+                                {i === visibleWordCount - 1 && visibleWordCount < wordArray.length && (
+                                    <span className="cursor">|</span>
+                                )}
+                </span>
                         ))}
-                    </div>
-                )}
+                        <div>
+                            <button onClick={speakNarrative} className="btn speak-btn">
+                                {isSpeaking ? '🔇 Stop' : '🔊 Speak'}
+                            </button>
+                        </div>
             </div>
 
-            {error && <p className="error">{error}</p>}
-            {loading && <div className="spinner"></div>}
-
-            {weather?.location && weather?.forecast?.forecastday?.[selectedDayIndex] && (
-                <div className="weather-box">
-                    <h2>{weather.location.name}, {weather.location.country}</h2>
-                    <p><strong>Local Time:</strong> {weather.location.localtime}</p>
-                    <p><strong>Day:</strong> {getDayName(weather.forecast.forecastday[selectedDayIndex].date)}</p>
-                    <p><strong>Condition:</strong> {weather.forecast.forecastday[selectedDayIndex].day.condition.text}</p>
-                    <p><strong>Temperature:</strong> {weather.forecast.forecastday[selectedDayIndex].day.avgtemp_c}°C / {cToF(weather.forecast.forecastday[selectedDayIndex].day.avgtemp_c)}°F</p>
-                    <p><strong>Humidity:</strong> {weather.forecast.forecastday[selectedDayIndex].day.avghumidity}%</p>
-                    <p><strong>Max Wind:</strong> {weather.forecast.forecastday[selectedDayIndex].day.maxwind_kph} km/h</p>
-                    <p>🌅 <strong>Sunrise:</strong> {weather.forecast.forecastday[selectedDayIndex].astro.sunrise} &nbsp; | &nbsp;
-                        🌇 <strong>Sunset:</strong> {weather.forecast.forecastday[selectedDayIndex].astro.sunset}
-                    </p>
-                </div>
-            )}
-
-            {wordArray.length > 0 && (
-                <div className="narrative-container">
-                    <h3><span style={{ color: '#007bff' }}>AI</span> Narrative</h3>
-                    {wordArray.map((word, i) => (
-                        <span
-                            key={i}
-                            className="narrative-word"
-                            style={{
-                                animationDelay: `${i * 80}ms`,
-                                animationFillMode: i < visibleWordCount ? 'forwards' : 'none'
-                            }}
-                        >
-                            {word}
-                            {i === visibleWordCount - 1 && visibleWordCount < wordArray.length && (
-                                <span className="cursor">|</span>
-                            )}
-                        </span>
-                    ))}
-                    <div>
-                        <button onClick={speakNarrative} className="btn speak-btn">
-                            {isSpeaking ? '🔇 Stop' : '🔊 Speak'}
-                        </button>
-                    </div>
-                </div>
-            )}
+                )}
+            </div>
         </div>
     );
 }

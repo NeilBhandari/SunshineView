@@ -1,27 +1,133 @@
 /* App.css */
+* {
+  box-sizing: border-box;
+}
+
+html{
+  height: 100%;
+}
+
+h1{
+  color: inherit;
+  height: 100%;
+  padding: 0 0.5vw;
+}
+
+
+.nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  background-color: #87CEFA;
+  color: #F0FFF0;
+  position: relative; /* Ensure dropdown isn't clipped */
+  z-index: 1;
+}
+
+
+.search {
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  position: relative; /* so absolute children can be positioned */
+  flex-wrap: wrap;
+}
+
+
+
 .header-container {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
-  margin-top: 20px;
+  margin: 20px auto;
+  justify-content: center;
 }
+
 
 .controls-container {
   display: flex;
   align-items: center;
-  justify-content: center;
+  position: relative; /* so absolute children can be positioned */
   flex-wrap: wrap;
-  gap: 10px;
-  margin-top: 10px;
 }
 
-body {
+
+
+.day-container {
+  display: flex;
+  flex-direction: column;
+  margin-left: 10px;
+  position: relative;
+  left: 40em;
+}
+
+.day-button {
+  padding: 10px 15px;
+  border: 1px solid #ccc;
+  background-color: white;
+  cursor: pointer;
+  border-radius: 5px;
+  text-align: left;
+}
+
+.day-button.selected {
+  background-color: #007bff;
+  color: white;
+  font-weight: bold;
+}
+
+.day-details {
+  flex: 1;
+  background-color: #f9f9f9;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.body-default {
   margin: 0;
   padding: 0;
   font-family: 'Segoe UI', sans-serif;
-  background: linear-gradient(to bottom right, #fdf5e6, #ffe0b2);
-  color: #333;
+  background: #448aff;
+  background-attachment: fixed;
+  background-size: cover;
+  background-repeat: no-repeat;
+  height: 100%;
 }
+
+.body-sunny {
+  background-image: url('../img/sunny.jpg');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  height: 100%;
+}
+
+.body-rain {
+  background-image: url('../img/rain.jpg');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  height: 100%;
+}
+
+.body-cloudy {
+  background-image: url('../img/cloudy.jpg');
+  background-size: cover;
+  height: 100%;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.body-snow {
+  background-image: url('../img/snow.jpg');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  height: 100%;
+}
+
 
 /* Spinner */
 .spinner {
@@ -42,17 +148,20 @@ body {
 
 /* Input and Button Group */
 input {
-  padding: 10px;
-  border: 1px solid #ccc;
+  height: 100%;
+  background-color: #FFFAFA;
+  padding: 1.5vh 1.5vw;
+  border: 1px solid #FFFAFA;
   border-radius: 8px;
-  width: 250px;
+  width: 30em;
   font-size: 16px;
-  margin-right: 8px;
   box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
+  margin-right: 0.2em;
 }
 
 button {
-  padding: 10px 14px;
+  height: 100%;
+  padding: .7em;
   border: none;
   background-color: #ffd54f;
   color: #000;
@@ -61,6 +170,19 @@ button {
   cursor: pointer;
   transition: background-color 0.2s ease-in-out;
 }
+
+.btn-primary{
+
+
+}
+
+.btn-secondary{
+  margin-right: 10px;
+
+
+}
+
+
 
 button:hover {
   background-color: #ffca28;
@@ -71,25 +193,29 @@ button:active {
 }
 
 /* Suggestions Dropdown */
-.suggestion-dropdown {
+.suggestions-dropdown {
   position: absolute;
-  background-color: #fff;
-  border: 1px solid #ccc;
-  width: 250px;
+  top: 100%;
+  left: 0;
+  background-color: #F0FFF0;
+  border: 1px solid #000000;
+  color: #000000;
   margin-top: 5px;
-  z-index: 10;
+  z-index: 999;
+  width: 30em;
   text-align: left;
   border-radius: 8px;
   box-shadow: 0px 2px 8px rgba(0,0,0,0.1);
 }
 
-.suggestion-dropdown div {
+
+.suggestion-item {
   padding: 10px;
   cursor: pointer;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid #000000;
 }
 
-.suggestion-dropdown div:hover {
+.suggestions-dropdown div:hover {
   background-color: #f0f0f0;
 }
 
@@ -114,31 +240,30 @@ button:active {
   background-color: #ddd;
 }
 
+
 /* Weather Info Box */
 .weather-box {
-  background-color: rgba(255, 255, 255, 0.7);
-  margin: 20px auto;
+  background-color: rgba(255, 255, 255, 0.9);
+  margin: 0 auto;
   padding: 25px;
   border-radius: 20px;
-  max-width: 600px;
+  max-width: 60%;
   text-align: center;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  position:absolute;
 }
 
+
 .weather-box h2 {
-  font-size: 24px;
+  font-size: 32px;
   margin-bottom: 10px;
 }
 
 .weather-box p {
-  font-size: 16px;
+  font-size: 1.5em;
   margin: 6px 0;
 }
 
-.weather-box .highlight {
-  font-weight: bold;
-  font-size: 28px;
-}
 
 .weather-box .weather-icon {
   font-size: 48px;
@@ -147,6 +272,7 @@ button:active {
 
 /* Narrative Container */
 .narrative-container {
+  font-size: 1.5em;
   background-color: #f9f9ff;
   padding: 20px;
   margin: 30px auto;
@@ -215,13 +341,4 @@ button:active {
   background-color: #ccc;
 }
 
-/* App Title */
-h1 {
-  margin-top: 0;
-  font-size: 28px;
-  color: #333;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 10px;
-}
+
