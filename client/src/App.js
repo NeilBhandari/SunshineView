@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './App.css';
+import WeatherParticles from "./WeatherParticles";
+
 
 function App() {
     const [city, setCity] = useState('');
@@ -200,9 +202,12 @@ function App() {
 
 
 
-    return (
-        <div>
 
+
+
+    return (
+        <div className= "App">
+            <WeatherParticles weather={weather} selectedDayIndex={selectedDayIndex} />
             <nav className="nav">
                 <h1 className="title">🌤️ Sunshine View</h1>
                 <div className="controls-container">
@@ -232,6 +237,8 @@ function App() {
                 <button className="btn-secondary" onClick={useMyLocation}>📍 Use My Location</button>
 
             </nav>
+
+
 
 
 
@@ -293,7 +300,7 @@ function App() {
 
                 </div>
 
-            <div>
+            <div className= "narrative">
                 {wordArray.length > 0 && (
                     <div className="narrative-container">
                         <h3><span style={{ color: '#007bff' }}>AI</span> Narrative</h3>
@@ -321,6 +328,7 @@ function App() {
 
                 )}
             </div>
+
         </div>
     );
 }
