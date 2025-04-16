@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect} from 'react';
 import axios from 'axios';
 import './App.css';
 import WeatherParticles from "./WeatherParticles";
@@ -68,7 +68,7 @@ function App() {
         setVisibleWordCount(0);
         setWordArray([]);
         try {
-            const res = await axios.post('http://localhost:5000/narrative', { location, dayData });
+            const res = await axios.post('http://localhost:5000/narrative', {location, dayData});
             const newNarrative = res.data.narrative;
             setNarrative(newNarrative);
             const words = newNarrative.trim().split(/\s+/);
@@ -198,16 +198,12 @@ function App() {
     }, [weather, selectedDayIndex]);
 
     const cToF = (celsius) => (celsius * 9 / 5 + 32).toFixed(1);
-    const getDayName = (dateStr) => new Date(dateStr).toLocaleDateString('en-US', { weekday: 'long' });
-
-
-
-
+    const getDayName = (dateStr) => new Date(dateStr).toLocaleDateString('en-US', {weekday: 'long'});
 
 
     return (
-        <div className= "App">
-            <WeatherParticles weather={weather} selectedDayIndex={selectedDayIndex} />
+        <div className="App">
+            <WeatherParticles weather={weather} selectedDayIndex={selectedDayIndex}/>
             <nav className="nav">
                 <h1 className="title">🌤️ Sunshine View</h1>
                 <div className="controls-container">
@@ -222,7 +218,8 @@ function App() {
                         {suggestions.length > 0 && (
                             <div className="suggestions-dropdown">
                                 {suggestions.map((sugg, idx) => (
-                                    <div key={idx} onClick={() => handleSuggestionClick(sugg)} className="suggestion-item">
+                                    <div key={idx} onClick={() => handleSuggestionClick(sugg)}
+                                         className="suggestion-item">
                                         {sugg.display}
                                     </div>
                                 ))}
@@ -238,72 +235,86 @@ function App() {
 
             </nav>
 
+            <div className = "main">
 
+                {!weather && !narrative ? (
+                    <div className="landing">
+                        <h1>🌤️ Welcome to Sunshine View
+                            <p>Enter a location or use your current location to get started!</p>
+                        </h1>
 
-
+                    </div>
+                ) : (
+                    <>
 
             <div className="header-container">
-
 
 
                 {error && <p className="error">{error}</p>}
                 {loading && <div className="spinner"></div>}
 
 
-                    {weather?.location && weather?.forecast?.forecastday?.[selectedDayIndex] && (
-                        <>
+                {weather?.location && weather?.forecast?.forecastday?.[selectedDayIndex] && (
+                    <>
 
                         <div className="weather-box">
                             <h2>{weather.location.name}, {weather.location.country}</h2>
                             <p><strong>Local Time:</strong> {weather.location.localtime}</p>
-                            <p><strong>Day:</strong> {getDayName(weather.forecast.forecastday[selectedDayIndex].date)}</p>
-                            <p><strong>Condition:</strong> {weather.forecast.forecastday[selectedDayIndex].day.condition.text}</p>
-                            <p><strong>Temperature:</strong> {weather.forecast.forecastday[selectedDayIndex].day.avgtemp_c}°C / {cToF(weather.forecast.forecastday[selectedDayIndex].day.avgtemp_c)}°F</p>
-                            <p><strong>Humidity:</strong> {weather.forecast.forecastday[selectedDayIndex].day.avghumidity}%</p>
-                            <p><strong>Max Wind:</strong> {weather.forecast.forecastday[selectedDayIndex].day.maxwind_kph} km/h</p>
+                            <p><strong>Day:</strong> {getDayName(weather.forecast.forecastday[selectedDayIndex].date)}
+                            </p>
+                            <p>
+                                <strong>Condition:</strong> {weather.forecast.forecastday[selectedDayIndex].day.condition.text}
+                            </p>
+                            <p>
+                                <strong>Temperature:</strong> {weather.forecast.forecastday[selectedDayIndex].day.avgtemp_c}°C
+                                / {cToF(weather.forecast.forecastday[selectedDayIndex].day.avgtemp_c)}°F</p>
+                            <p>
+                                <strong>Humidity:</strong> {weather.forecast.forecastday[selectedDayIndex].day.avghumidity}%
+                            </p>
+                            <p><strong>Max
+                                Wind:</strong> {weather.forecast.forecastday[selectedDayIndex].day.maxwind_kph} km/h</p>
                             <p>🌅 <strong>Sunrise:</strong> {weather.forecast.forecastday[selectedDayIndex].astro.sunrise} &nbsp; | &nbsp;
                                 🌇 <strong>Sunset:</strong> {weather.forecast.forecastday[selectedDayIndex].astro.sunset}
                             </p>
                         </div>
 
-                            {weather?.forecast && (
-                                <div className="day-container">
-                                    {weather.forecast.forecastday.map((day, idx) => (
-                                        <button
-                                            key={idx}
-                                            onClick={() => setSelectedDayIndex(idx)}
-                                            className={`day-button ${selectedDayIndex === idx ? 'selected' : ''}`}
-                                        >
-                                            {new Date(day.date).toLocaleDateString(undefined, {
-                                                weekday: 'short',
-                                                month: 'short',
-                                                day: 'numeric',
-                                            })}
+                        {weather?.forecast && (
+                            <div className="day-container">
+                                {weather.forecast.forecastday.map((day, idx) => (
+                                    <button
+                                        key={idx}
+                                        onClick={() => setSelectedDayIndex(idx)}
+                                        className={`day-button ${selectedDayIndex === idx ? 'selected' : ''}`}
+                                    >
+                                        {new Date(day.date).toLocaleDateString(undefined, {
+                                            weekday: 'short',
+                                            month: 'short',
+                                            day: 'numeric',
+                                        })}
 
-                                                <>
-                                                    <p><strong>Condition:</strong> {day.day.condition.text}</p>
-                                                    <p><strong>High:</strong> {day.day.maxtemp_f}°F
-                                                        <strong> Low:</strong> {day.day.mintemp_f}°F</p>
-                                                    <p><strong>Humidity:</strong> {day.day.avghumidity}%</p>
-                                                </>
-                                        </button>
-                                    ))}
-                                </div>
-                            )}
-
-
-
-                        </>
-
-                    )}
+                                        <>
+                                            <p><strong>Condition:</strong> {day.day.condition.text}</p>
+                                            <p><strong>High:</strong> {day.day.maxtemp_f}°F
+                                                <strong> Low:</strong> {day.day.mintemp_f}°F</p>
+                                            <p><strong>Humidity:</strong> {day.day.avghumidity}%</p>
+                                        </>
+                                    </button>
+                                ))}
+                            </div>
+                        )}
 
 
-                </div>
+                    </>
 
-            <div className= "narrative">
+                )}
+
+
+            </div>
+
+            <div className="narrative">
                 {wordArray.length > 0 && (
                     <div className="narrative-container">
-                        <h3><span style={{ color: '#007bff' }}>AI</span> Narrative</h3>
+                        <h3><span style={{color: '#007bff'}}>AI</span> Narrative</h3>
                         {wordArray.map((word, i) => (
                             <span
                                 key={i}
@@ -324,11 +335,13 @@ function App() {
                                 {isSpeaking ? '🔇 Stop' : '🔊 Speak'}
                             </button>
                         </div>
-            </div>
+                    </div>
+                )}
 
+            </div>
+                    </>
                 )}
             </div>
-
         </div>
     );
 }

@@ -3,6 +3,8 @@
   box-sizing: border-box;
 }
 
+
+
 html{
   height: 100%;
 }
@@ -12,22 +14,46 @@ html{
   z-index: 0;
 }
 
+.main{
+  height: 100%;
+}
+
+.landing {
+  text-align: center;
+  font-size: 1.5rem;
+  background-image: url('../img/sunshine.jpg');
+  background-size: 100%;
+  background-repeat: no-repeat;
+  background-position: center;
+  height: calc(100dvh - 70px);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  padding: 25rem;
+  overflow:clip;
+}
+
 h1{
   color: inherit;
   height: 100%;
-  padding: 0 0.5vw;
+  padding: 15px 0.5vw;
 }
 
 
 .nav {
   display: flex;
+  height: 70px;
   justify-content: space-between;
   align-items: center;
-  flex-wrap: wrap;
   background-color: #87CEFA;
   color: #F0FFF0;
   position: relative;
-  z-index: 1;
+  width: 100%;
+  top: 0;
+  left: 0;
+  z-index: 999;
 }
 
 
@@ -36,7 +62,6 @@ h1{
   display: flex;
   align-items: center;
   position: relative; /* so absolute children can be positioned */
-  flex-wrap: wrap;
 }
 
 
@@ -54,7 +79,6 @@ h1{
   display: flex;
   align-items: center;
   position: relative; /* so absolute children can be positioned */
-  flex-wrap: wrap;
 }
 
 
@@ -172,7 +196,7 @@ h1{
 input {
   height: 100%;
   background-color: #FFFAFA;
-  padding: 1.5vh 1.5vw;
+  padding: 15px 20px;
   border: 1px solid #FFFAFA;
   border-radius: 8px;
   width: 30em;
@@ -183,7 +207,7 @@ input {
 
 button {
   height: 100%;
-  padding: .7em;
+  padding: 15px 20px;
   border: none;
   background-color: #ffd54f;
   color: #000;
@@ -199,6 +223,15 @@ button {
 }
 
 .btn-secondary{
+  height: 40px;
+  padding: 0.7em 15px;
+  border: none;
+  background-color: #ffd54f;
+  color: #000;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
   margin-right: 10px;
 
 
@@ -272,7 +305,7 @@ button:active {
   max-width: 60%;
   text-align: center;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  position:absolute;
+  position: fixed;
 }
 
 
@@ -292,7 +325,7 @@ button:active {
   margin-bottom: 10px;
 }
 
-.narative{
+.narrative{
   position: relative;
   z-index: 10;
 }
@@ -302,8 +335,8 @@ button:active {
   font-size: 1.5em;
   background-color: #f9f9ff;
   padding: 20px;
-  margin: 30px auto;
-  max-width: 650px;
+  margin: 10vh auto;
+  max-width: 50vw;
   border-radius: 12px;
   font-style: italic;
   text-align: left;
