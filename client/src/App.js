@@ -331,7 +331,7 @@ function App() {
                 </span>
                         ))}
                         <div>
-                            <button onClick={speakNarrative} className="btn speak-btn">
+                            <button onClick={speakNarrative} className="speak-btn">
                                 {isSpeaking ? '🔇 Stop' : '🔊 Speak'}
                             </button>
                         </div>
